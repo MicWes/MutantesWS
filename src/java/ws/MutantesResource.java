@@ -138,7 +138,7 @@ public class MutantesResource {
             PreparedStatement stmt = conn.prepareStatement(insertQuery);
             stmt.setString(1, nome);
             stmt.setInt(2, user_id);
-            stmt.setInt(2, hability_id);
+            stmt.setInt(3, hability_id);
             if(stmt.executeUpdate() > 0){
                 Mutante m = new Mutante();
                 m.setNome(nome);
