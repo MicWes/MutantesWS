@@ -61,7 +61,7 @@ public class MutantesResource {
     @GET
     @Path("/usuario")
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean getUsuario(@QueryParam("login") String login, @QueryParam("password") String password){
+    public boolean getUsuario(@QueryParam("usuario") String login, @QueryParam("senha") String password){
         try {
             //query select usuario
             Connection conn = ConnectionFactory.getConnection();
