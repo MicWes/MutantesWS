@@ -55,13 +55,14 @@ public class MutantesResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
         //TODO return proper representation object
-        throw new UnsupportedOperationException();
+        return "getJson teste";
+     
     }
     
     @GET
     @Path("/usuario")
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean getUsuario(@QueryParam("usuario") String login, @QueryParam("senha") String password){
+    public Usuario getUsuario(@QueryParam("login") String login, @QueryParam("password") String password){
         try {
             //query select usuario
             Connection conn = ConnectionFactory.getConnection();
@@ -70,11 +71,22 @@ public class MutantesResource {
             stmt.setString(1, login);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
-            return(rs.next());
+            if(rs.next()){
+                Usuario u = new Usuario();
+                u.setUserId(rs.getInt("user_id"));
+                u.setLogin(login);
+                u.setPassword(password);
+                return u;
+            }else{
+                return null;
+            }
+            
+            //return rs.next();
         } catch (SQLException ex) {
             Logger.getLogger(MutantesResource.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
+            return null;
         }
+        
     }
     
     @GET
@@ -119,7 +131,7 @@ public class MutantesResource {
     @Path("/mutante")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Integer insertMutante(@FormParam("nome") String nome, @FormParam("user_id") Integer user_id, @FormParam("hability_id") Integer hability_id) {
+    public Mutante insertMutante(@FormParam("nome") String nome, @FormParam("user_id") Integer user_id, @FormParam("hability_id") Integer hability_id) {
         try {
             Connection conn = ConnectionFactory.getConnection();
             String insertQuery = "INSERT into mutante(nome, user_id, hability_id) values (?, ?, ?)";
@@ -127,11 +139,18 @@ public class MutantesResource {
             stmt.setString(1, nome);
             stmt.setInt(2, user_id);
             stmt.setInt(2, hability_id);
-            return (stmt.executeUpdate());
+            if(stmt.executeUpdate() > 0){
+                Mutante m = new Mutante();
+                m.setNome(nome);
+                
+                return m;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(MutantesResource.class.getName()).log(Level.SEVERE, null, ex);
-            return -1;
+            return null;
         }
+        return null;
+        
     }
    
 }
